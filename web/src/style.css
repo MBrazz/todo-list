@@ -1,0 +1,365 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Ubuntu:wght@400;500&display=swap");
+
+:root {
+  --primary: #51afe2;
+  --light: #eee;
+  --grey: #a19595;
+  --dark: #313154;
+  --danger: #e94b48;
+  --business: #3a82ee;
+  --personal: var(--primary);
+  --business-glow: 0px 0px 4px rgba(58, 130, 238, 0.75);
+  --personal-glow: 0px 0px 4px rgba(234, 64, 164, 0.75);
+
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#app {
+  width: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+input:not([type="radio"]):not([type="checkbox"]),
+button {
+  appearance: none;
+  border: none;
+  outline: none;
+  background: none;
+  cursor: initial;
+}
+
+body {
+  color: var(--dark);
+  display: flex;
+  justify-content: center;
+  margin: 0rem 0 0 0;
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+}
+
+hr {
+  border-width: 0.1px;
+  border-color: #e5e5f0;
+}
+
+.create-task h1 {
+  font-size: 1.4em;
+  line-height: 1.1;
+  margin-right: 8rem;
+  font-weight: 500;
+  color: #fff;
+  font-family: "Ubuntu", sans-serif;
+}
+
+.task-list h2 {
+  color: var(--dark);
+  font-size: 30px;
+  font-weight: 500;
+  margin: 4rem 0 0.6rem 0;
+  font-family: "Ubuntu", sans-serif;
+}
+
+.task-list header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.task-list header .quant h2 {
+  border: 2px solid #000;
+  padding: 0.1rem 0.7rem;
+  border-radius: 100px;
+}
+
+#app-header {
+  width: 100%;
+  background-color: #313154;
+}
+
+.create-task {
+  display: flex;
+  flex-direction: row;
+  height: 4rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.create-task input {
+  height: 2.5rem;
+  font-size: 14px;
+  border-radius: 0.1rem;
+}
+
+.create-task input[type="text"] {
+  width: 18rem;
+  padding: 1rem 0.8rem;
+  color: var(--dark);
+  background-color: #fff;
+  box-shadow: var(--shadow);
+  margin-right: 0.75rem;
+}
+
+.create-task input[type="submit"] {
+  width: 8rem;
+  color: #fff;
+  background-color: var(--primary);
+  box-shadow: var(--personal-glow);
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.create-task input[type="submit"]:hover {
+  opacity: 0.85;
+}
+
+#new-task-form {
+  display: flex;
+  flex-direction: row;
+}
+
+#logout {
+  background-color: #e13737;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 0.1rem;
+}
+
+#logout:hover {
+  opacity: 0.85;
+}
+
+.container {
+  width: 720px;
+  margin: 0 auto;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  display: none;
+}
+
+.bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  border: 2px solid #313154;
+}
+
+.bubble.personal {
+  border-color: var(--personal);
+  box-shadow: var(--personal-glow);
+}
+
+.bubble::after {
+  content: "";
+  display: block;
+  opacity: 0;
+  width: 5px;
+  height: 5px;
+  background-color: #313154;
+  box-shadow: #313154;
+  border-radius: 1px;
+  transition: 0.2s ease-in-out;
+}
+
+.bubble.personal::after {
+  background-color: var(--personal);
+  box-shadow: var(--personal-glow);
+}
+
+input:checked ~ .bubble::after {
+  width: 10px;
+  height: 10px;
+  opacity: 1;
+}
+
+.task-list .list {
+  margin-top: 1.2rem;
+}
+
+.task-list .task-item {
+  display: flex;
+  align-items: center;
+  text-align: start;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.task-item label {
+  display: block;
+  margin-right: 0.7rem;
+  cursor: pointer;
+}
+
+.task-item .task-content {
+  flex: 1 1 0%;
+}
+
+.task-item .task-content input {
+  color: var(--dark);
+  font-size: 16px;
+}
+
+.task-item .actions {
+  display: flex;
+  align-items: center;
+}
+
+.task-item .actions button {
+  display: block;
+  padding: 0.5rem;
+  border-radius: 2px;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.task-item .actions button:hover {
+  opacity: 0.75;
+}
+
+.task-item .actions .edit {
+  margin-right: 0.5rem;
+  background-color: var(--primary);
+}
+
+.task-item .actions .delete {
+  background-color: var(--dark);
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.task-item.done .task-content input {
+  text-decoration: line-through;
+  color: var(--grey);
+}
+
+.task-done .list {
+  margin-top: 1.2rem;
+}
+
+.task-done .task-item {
+  display: flex;
+  align-items: center;
+  text-align: start;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* MODAL */
+
+.modal {
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  background-color: rgb(0, 0, 0); 
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: azure;
+  border-radius: 5px;
+  text-align: start;
+  padding: 1.6rem;
+}
+
+.modal-content header {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  display: flex;
+  align-self: flex-start;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-content p {
+  margin: 1.1rem 0 2.1rem 0;
+}
+
+.modal-content h2 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.modal-content footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-content footer button {
+  border-radius: 5px;
+  font-size: 14px;
+  border-radius: 5px !important;
+  border: 2px solid transparent;
+  padding: 0.6em 1.2em !important;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all ease-in 0.2s;
+}
+
+.modal-content footer #yes {
+  border-radius: 5px;
+  background-color: #fc216a;
+  color: white !important;
+}
+
+.modal-content footer #no {
+  margin-right: 0.6rem;
+  background-color: #e1e5e9;
+  color: #72737e !important;
+}
+
+.modal-content footer #no:hover {
+  border-color: #93949e;
+  transition: all ease-in 0.2s;
+  opacity: inherit !important;
+}
+
+.modal-content footer #yes:hover {
+  background-color: rgb(223, 27, 92);
+  transition: all ease-in 0.2s;
+  opacity: inherit !important;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

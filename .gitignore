@@ -38,7 +38,11 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 
+
 # Dependency directories
+/vendor/
+yarn-error.log
+npm-debug.log
 node_modules/
 jspm_packages/
 
