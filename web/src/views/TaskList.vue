@@ -34,14 +34,13 @@ const notify = (message, type) => {
 }
 
 const getList = () => {
-  api.get("/task/my-tasks", {
+  api.get("/task/all", {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${access_token}`
     }
   }).then((response) => {
-    list.value = response.data.data
-
+    list.value = response.data.data.list
   })
     .catch((error) => {
       console.error(error)
@@ -116,6 +115,11 @@ const Exit = () => {
   localStorage.removeItem('user');
   window.location.href = '/';
 }
+
+
+
+
+
 </script>
 
 <template>
@@ -138,7 +142,7 @@ const Exit = () => {
       <hr />
       <div class="list" id="task-list">
         <div v-for="(task) in list" :key="task.id" :class="`task-item ${task.done && 'done'}`">
-          <Task :task="task" :notify="notify" :removeTask="removeTask" />
+          <Task :getList="getList" :list="list" :task="task" :notify="notify" :removeTask="removeTask"/>
         </div>
       </div>
 
