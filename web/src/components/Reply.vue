@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed, watch, reactive } from "vue"
+import api from "../services/api";
 
 const props = defineProps({
 
@@ -11,37 +12,127 @@ const props = defineProps({
     type: Function,
     required: true,
   },
+
+  replies: {
+    type: Object,
+    require: true
+  },
+    getList: {
+    type: Function,
+    require: true
+  }
 })
 
 
 
 const added_reply = ref(false);
+const edit_reply = ref(false);
 const input_reply = ref('');
+const user = localStorage.getItem('user');
+const userJson = JSON.parse(user)
+const access_token = userJson.access_token
 
 // const removeReply = (reply) => {
 //   listReply.value = listReply.value.filter((t) => t !== comment)
 //   localStorage.removeItem('listReply');
 // }
 
-const newReply = (input_reply) => {
-  added_reply = true;
+// const newReply = (reply) => {
+//   added_reply = true;
+// }
+
+const newReply = async (input) => {
+  added_reply.value = false
+  await api({
+    method: 'POST',
+    url: '/comment',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`
+    },
+    data: {
+      task_id: props.comment.id,
+      parent_id: props.replies.id,
+      text: input
+    },
+  }).then(function (response) {
+    if (response.data) {
+      console.log(response.data)
+      props.getList();
+    }
+  })
+    .catch(function (response) {
+      console.log(response.data);
+    });
+}
+
+const removeReply = (reply) => {
+  api({
+    method: 'DELETE',
+    url: `/comment/${reply.id}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`
+    },
+  }).then(function (response) {
+    console.log(response.data);
+    props.getList();
+    props.notify('Comentário deletado com sucesso!!!', 'success')
+  })
+    .catch(function (response) {
+      console.log(response.data);
+    });
 }
 
 </script>
 
 <template>
-  <section class="reply" v-for="(reply, index) in comment.all_comments">
-    <div class="row">
+  <section class="reply" v-if="replies.all_comments.length > 0">
+    <div class="row" v-for="(reply, index) in comment.all_comments">
       <img src="../images/curve-reply.svg" alt="" id="curve">
       <div class="column">
-        <input type="text" name="reply" placeholder="" v-model="reply.text"/>
-        <button id="new-reply" @click="" v-if="added_reply==false">Responder</button>
+        <input type="text" name="reply" placeholder="" v-model="reply.id"/>
+        <button id="new-reply" @click="added_reply = true" >Responder</button>
       </div>
-    <button class="defaultButton" id="add" v-if="added_reply" @click="newReply(input_reply)">Enviar</button>
-      <button @click="" class="defaultButton" id="update" v-if="added_reply==false"><img src="../images/edit.svg" alt=""/></button>
-      <button @click="removeReply(reply)" class="defaultButton" id="delete" v-if="added_reply==false"><img src="../images/trash.svg" alt=""/></button>
+    <button class="defaultButton" id="add" v-if="edit_reply">Enviar</button>
+      <button @click="" class="defaultButton" id="update" v-if="edit_reply==false">
+        <img src="../images/edit.svg" alt=""/>
+      </button>
+      <button @click="removeReply(reply)" class="defaultButton" id="delete" v-if="edit_reply==false">
+        <img src="../images/trash.svg" alt=""/>
+      </button>
     </div>
   </section>
+
+  <section class="reply">
+      <div class="row" v-for="(reply, index) in replies.all_comments">
+        <img src="../images/curve-reply.svg" alt="" id="curve">
+        <div class="column">
+          <input type="text" name="reply" placeholder="" v-model="reply.id"/>
+          <button id="new-reply" @click="added_reply=true" v-if="!added_reply">Responder</button>
+        </div>
+      <button class="defaultButton" id="add" v-if="edit_reply" @click="newReply({input_reply})">Enviar</button>
+        <button @click="" class="defaultButton" id="update" v-if="!edit_reply">
+          <img src="../images/edit.svg" alt=""/>
+        </button>
+        <button @click="removeReply(reply)" class="defaultButton" id="delete" v-if="!edit_reply">
+          <img src="../images/trash.svg" alt=""/>
+        </button>
+      </div>
+    </section>
+
+    <section class="reply" v-if="added_reply">
+        <div class="row">
+          <img src="../images/curve-reply.svg" alt="" id="curve">
+          <div class="column">
+            <input v-model="input_reply" type="text" name="reply" placeholder="">
+            <button id="new-reply" @click="added_reply">Responder</button>
+          </div>
+        <button class="defaultButton" id="add" v-if="added_reply" @click="newReply(input_reply)">Enviar</button>
+          <button @click="" class="defaultButton" id="update" v-if="edit_reply"><img src="../images/edit.svg" alt=""/></button>
+          <button @click="removeReply()" class="defaultButton" id="delete" v-if="edit_reply"><img src="../images/trash.svg" alt=""/></button>
+        </div>
+      </section>
 </template>
 
 <style scoped>

@@ -103,21 +103,7 @@ const editComment = (comment) => {
 
 const newReply = () => {
   is_new_reply.value = true;
-  // listReply.value.push({
-  //   id: reply.id,
-  //   text: input_reply,
-  //   // task_id: task.id
-  // })
-  // localStorage.setItem("listReply", JSON.stringify(listReply.value))
 }
-// for (let index = 0; index < props.task.comments.length; index++) {
-  // if() {
-
-    // console.log(props.task.comments[0].all_comments[index].text)
-  // }
-
-  
-// }
 </script>
 
 <template >
@@ -138,14 +124,27 @@ const newReply = () => {
       <button @click="removeComment(comment)" class="defaultButton" id="delete"><img src="../images/trash.svg" alt=""/></button>
     </div>
 
-    <button id="new-reply" @click="newReply()" v-if="comment.parent_id === null">Responder</button>
-    <div v-for="(reply, index) in comment.all_comments">
-      <div v-if="reply.all_comments.length > 0">
-        <Reply :newReply="newReply" :comment="comment" />
-        {{ reply.all_comments }}
-      </div>
+    <button id="new-reply" @click="is_new_reply = true">Responder</button>
+    <div v-for="(replies, index) in comment.all_comments"> 
+        <Reply :newReply="newReply" :comment="comment" :getList="getList" :replies="replies"/>
     </div>
   </section>
+
+  <section class="comment" v-if="is_new_reply">
+
+      <div class="row">
+
+        <input type="text" name="comment" v-model="input_comment" />
+
+        <button @click="editComment()" v-if="!is_new_reply" class="defaultButton" id="update"><img src="../images/edit.svg" alt=""/></button>
+
+        <button @click="removeComment()" v-if="!is_new_reply" class="defaultButton" id="delete"><img src="../images/trash.svg" alt=""/></button>
+
+        <button class="defaultButton" id="add">Enviar</button>
+      </div>
+
+      <button id="new-reply" @click="is_new_reply = true">Responder</button>
+    </section>
 </template>
 
 <style scoped>
